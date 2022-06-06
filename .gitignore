@@ -1,3 +1,5 @@
-bin/Debug
-obj/Debug
+/bin
+/obj
 c_dictionary.layout
+c_dictionary.depend
+
