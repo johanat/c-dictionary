@@ -4,8 +4,11 @@
 #include <ctype.h>
 
 int benningAreTheSame(char *word1, char word2[]);
-void printMatchingWords(char **words,char pattern[], int length);
+void printMatchingWords(char **words,char pattern[], int length, char primerWordFile[], char definicionWord[]);
 void tolowerCase(char words[]);
+void lineBreak(char *words, char primerWordFile[], char definicionWord[] );
+
+
 /*ejercicio_1*/
 
 int main()
@@ -18,6 +21,9 @@ int main()
     char wordsX[50];
     int iguales=1;
     int totalWords = 0;
+    char primerWordFile[50];
+    char definicionWord[3000];
+
 
     FILE *f; // declaracion de un fichero
     f = fopen("english_dictionary.txt","r");
@@ -41,7 +47,6 @@ int main()
         fgets(auxWord,3000,f);
         length=strlen(auxWord);
         words[i]=(char*)malloc(length*sizeof(char));
-
     }
 
     rewind(f);
@@ -58,7 +63,9 @@ int main()
         printf("Introduce a word\n");
         gets(wordsX);
         system("cls");
-        printMatchingWords(words,wordsX, totalWords);
+        length=strlen(auxWord);
+        //lineBreak(words[i],primerWordFile, definicionWord);
+        printMatchingWords(words,wordsX, totalWords,primerWordFile, definicionWord);
     }
 
     return 0;
@@ -66,13 +73,14 @@ int main()
 
 int benningAreTheSame(char *word1,char word2[]){
 
-
     tolowerCase(word2);
 
      for(int i=0; word1[i]!=0 && word2[i]!=0; i++){
         if(word1[i] == word2[i]){
             if(word2[i+1]=='\0') {
+                // printf("hola1\n");
                 return 0;
+
             }
         }
         else {
@@ -83,21 +91,27 @@ int benningAreTheSame(char *word1,char word2[]){
     return 1;
 }
 
-void printMatchingWords(char **words,char pattern[], int length)
-{
+void printMatchingWords(char **words,char pattern[], int length, char primerWordFile[], char definicionWord[]){
     int counter=1;
     int iguales=1;
     int j=0;
 
+
     for(int i=0; i < length; i++){
+        lineBreak(words[i],primerWordFile, definicionWord);
         iguales=benningAreTheSame(words[i],pattern);
+
         if(iguales ==0 ){
             counter++;
-            printf("\n%d   :%s",(j+1),words[i]);
+            // printf("hola2\n");
+            printf("\n%d:%s\n",(j+1),primerWordFile);
+            printf("%s",definicionWord);
+
             j++;
             if(counter > 10){
                 printf("\n\n");
                 break;
+
             }
         }
     }
@@ -116,5 +130,37 @@ void tolowerCase(char words[]){
             words[0]=words[0]-32;
         }
     }
+    //printf("hola3\n");
+
+}void lineBreak(char *words, char primerWordFile[], char definicionWord[]){
+
+
+    int i=0;
+    int length=0;
+    int index=0;
+
+
+    for(i=0; words[i]!=' '; i++){
+        primerWordFile[i]=words[i];
+        length=strlen(words);
+    }
+    primerWordFile[i]='\0';
+
+    index=i;
+
+    for (int i=0; i<length; i++){
+        definicionWord[i]=words[index];
+        index++;
+    }
 
 }
+
+
+
+
+
+
+
+
+
+

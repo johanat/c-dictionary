@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1654012919 source:c:\users\darwin\desktop\johana\c_dictionary\main.c
+1654526212 source:c:\users\darwin\desktop\johana\c_dictionary\main.c
 	<stdio.h>
 	<stdlib.h>
 	<string.h>
