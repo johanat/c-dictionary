@@ -138,7 +138,7 @@ void tolowerCase(char words[]){
     int i=0;
     int length=0;
     int index=0;
-
+    char separationDefinitionForLine[10][3000];
 
     for(i=0; words[i]!=' '; i++){
         primerWordFile[i]=words[i];
@@ -151,6 +151,12 @@ void tolowerCase(char words[]){
     for (int i=0; i<length; i++){
         definicionWord[i]=words[index];
         index++;
+    }
+
+    for (int i=0; i<10; i++){
+        if(definicionWord[i]>=1 && definicionWord[i]<=10; i++){
+            separationDefinitionForLine[i][i]=definicionWord[i];
+        }
     }
 
 }
