@@ -2,4 +2,5 @@
 /obj
 c_dictionary.layout
 c_dictionary.depend
-
+main.exe
+main.o
