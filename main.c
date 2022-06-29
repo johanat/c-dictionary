@@ -2,28 +2,25 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
+#define MAX_DEF 100
 
 int benningAreTheSame(char *word1, char word2[]);
-void printMatchingWords(char **words,char pattern[], int length, char primerWordFile[], char definicionWord[]);
-void tolowerCase(char words[]);
-void lineBreak(char *words, char primerWordFile[], char definicionWord[] );
+void printMatchingWords(char **wordOfFile,char pattern[], int length);
+void toLowerCase(char wordOfFile[]);
+void lineBreak(char *wordOfFile, char firstWordOfTheRow[], char definitionOfWord[], char** matrix);
 
-
-/*ejercicio_1*/
+// proyecto_dicionary.
 
 int main()
 {
-    char **words;
-    char auxWord[3000];
+    char **wordOfFile;
+    char wordRead[3000];
     int counter=0;
     int length=0;
     int counter1=0;
-    char wordsX[50];
-    int iguales=1;
+    char wordUser[50]; // palabra del usuario
+    int same=1; // iguales
     int totalWords = 0;
-    char primerWordFile[50];
-    char definicionWord[3000];
-
 
     FILE *f; // declaracion de un fichero
     f = fopen("english_dictionary.txt","r");
@@ -34,38 +31,38 @@ int main()
     }
 
     for(int i=0; !feof(f); i++){
-        fgets(auxWord, 3000,f);
+        fgets(wordRead, 3000,f);
         counter++;
     }
+
     totalWords = counter;
 
     rewind(f);
 
-    words =(char**)malloc(counter*sizeof(char*));
+    wordOfFile =(char**)malloc(counter*sizeof(char*));
 
     for(int i=0; !feof(f); i++){
-        fgets(auxWord,3000,f);
-        length=strlen(auxWord);
-        words[i]=(char*)malloc(length*sizeof(char));
+        fgets(wordRead,3000,f);
+        length=strlen(wordRead);
+        wordOfFile[i]=(char*)malloc(length*sizeof(char));
     }
 
     rewind(f);
 
     for(int i=0; !feof(f); i++){
-        fgets(auxWord,3000,f);
-        strcpy(words[i],auxWord);
+        fgets(wordRead,3000,f);
+        strcpy(wordOfFile[i],wordRead);
     }
+
     fclose(f);
 
     counter1=0;
 
     for(int i=0; 1==1; i++){
         printf("Introduce a word\n");
-        gets(wordsX);
+        gets(wordUser);
         system("cls");
-        length=strlen(auxWord);
-        //lineBreak(words[i],primerWordFile, definicionWord);
-        printMatchingWords(words,wordsX, totalWords,primerWordFile, definicionWord);
+        printMatchingWords(wordOfFile,wordUser, totalWords);
     }
 
     return 0;
@@ -73,14 +70,12 @@ int main()
 
 int benningAreTheSame(char *word1,char word2[]){
 
-    tolowerCase(word2);
+     toLowerCase(word2);
 
      for(int i=0; word1[i]!=0 && word2[i]!=0; i++){
         if(word1[i] == word2[i]){
             if(word2[i+1]=='\0') {
-                // printf("hola1\n");
                 return 0;
-
             }
         }
         else {
@@ -91,69 +86,137 @@ int benningAreTheSame(char *word1,char word2[]){
     return 1;
 }
 
-void printMatchingWords(char **words,char pattern[], int length, char primerWordFile[], char definicionWord[]){
-    int counter=1;
-    int iguales=1;
-    int j=0;
+void printMatchingWords(char **wordOfFile,char pattern[], int length){
 
+    char firstWordOfTheRow[50];
+    char definitionOfWord[3000];
+    int counter=0;
+    int same=1;
+    char** definitionsMatrix;
+    int i=0; // recorre filas
+    int j=0; // recorre columnas
+
+    definitionsMatrix =(char**)malloc(MAX_DEF*sizeof(char*));
+    if(definitionsMatrix==NULL){
+        printf("No se ha podido reservar espacio en la memoria\n");
+    }
+
+    for(int i=0; i<MAX_DEF; i++){
+        definitionsMatrix[i]=(char*)malloc(3000*sizeof(char));
+    }
+
+    j=0;
 
     for(int i=0; i < length; i++){
-        lineBreak(words[i],primerWordFile, definicionWord);
-        iguales=benningAreTheSame(words[i],pattern);
+        same=benningAreTheSame(wordOfFile[i],pattern);
 
-        if(iguales ==0 ){
+        if(same == 0){
+            lineBreak(wordOfFile[i],firstWordOfTheRow, definitionOfWord, definitionsMatrix);
+        }
+
+        if(same == 0 ){
             counter++;
-            // printf("hola2\n");
-            printf("\n%d:%s\n",(j+1),primerWordFile);
-            printf("%s",definicionWord);
-
+            printf("<<<< %s >>>>  \n",firstWordOfTheRow);
             j++;
-            if(counter > 10){
-                printf("\n\n");
-                break;
 
+            for(int m=0; m < MAX_DEF; m++){
+                if(strcmp(definitionsMatrix[m], "johana.") == 0){
+                    break;
+                }
+
+                printf("%s\n", definitionsMatrix[m]);
+
+                if(counter==10){
+                    printf("\n\n");
+                    return;
+
+                }
             }
         }
+
     }
+
+    //Liberar memoria
+    for(int i=0; i<10; i++) {
+        free(definitionsMatrix[i]);
+    }
+    free(definitionsMatrix);
 
     return 0;
 }
-void tolowerCase(char words[]){
 
-    for(int i=0; words[i]!='\0'; i++){
+void toLowerCase(char wordOfFile[]){
 
-        if(words[i]>=65 && words[i]<=90){
-            words[i]=words[i]+32;
+    for(int i=0; wordOfFile[i]!='\0'; i++){
+        if(wordOfFile[i]>=65 && wordOfFile[i]<=90){
+            wordOfFile[i]=wordOfFile[i]+32;
         }
 
         if(i==0){
-            words[0]=words[0]-32;
+            wordOfFile[0]=wordOfFile[0]-32;
         }
     }
-    //printf("hola3\n");
+}
 
-}void lineBreak(char *words, char primerWordFile[], char definicionWord[]){
-
+void lineBreak(char *wordOfFile, char firstWordOfTheRow[], char definitionOfWord[], char** matrix){
 
     int i=0;
     int length=0;
     int index=0;
+    int j=0;
+    int counter =0;
 
-
-    for(i=0; words[i]!=' '; i++){
-        primerWordFile[i]=words[i];
-        length=strlen(words);
+    for(i=0; wordOfFile[i]!=' '; i++){
+        firstWordOfTheRow[i]=wordOfFile[i];
     }
-    primerWordFile[i]='\0';
 
+    firstWordOfTheRow[i]='\0';
     index=i;
 
-    for (int i=0; i<length; i++){
-        definicionWord[i]=words[index];
+    for(int l=0; wordOfFile[l]!='\0'; l++){
+        definitionOfWord[l]=wordOfFile[index];
         index++;
     }
 
+    length=strlen(definitionOfWord);
+
+    int k=0;
+    i=0;
+
+    for(j=0;  j<length; j++){
+
+        if(definitionOfWord[j]>=49 && definitionOfWord[j]<58){
+            matrix[i][k]='\0';
+            i++;
+            k=0;
+        }
+
+        matrix[i][k]= definitionOfWord[j];
+        k++;
+
+        if(definitionOfWord[j]=='\n'){
+            matrix[i][k]='\0';
+            i++;
+            strcpy(matrix[i], "johana.");
+            break;
+        }
+    }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
