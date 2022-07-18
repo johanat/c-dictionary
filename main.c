@@ -165,6 +165,8 @@ void lineBreak(char *wordOfFile, char firstWordOfTheRow[], char definitionOfWord
     int index=0;
     int j=0;
     int counter =0;
+    char *p;
+    char space[5]="    ";
 
     for(i=0; wordOfFile[i]!=' '; i++){
         firstWordOfTheRow[i]=wordOfFile[i];
@@ -181,19 +183,53 @@ void lineBreak(char *wordOfFile, char firstWordOfTheRow[], char definitionOfWord
     length=strlen(definitionOfWord);
 
     int k=0;
+
     i=0;
 
-    for(j=0;  j<length; j++){
 
-        if(definitionOfWord[j]>=49 && definitionOfWord[j]<58){
+    for(j=0;  j<length; j++){
+        if(definitionOfWord[j]=='#'){
+            k=0;
             matrix[i][k]='\0';
             i++;
-            k=0;
+            matrix[i][k]='-';
+            k++;
+            j++;
+            matrix[i][k]='\0';
+            for(int z=0; definitionOfWord[j]!='.'; z++){
+                matrix[i][k]=definitionOfWord[j];
+                k++;
+                j++;
+                if(definitionOfWord[j]=='.'&&definitionOfWord[j+1]==' '){
+                    matrix[i][k]=definitionOfWord[j];
+                    k++;
+                    matrix[i][k]='\0';
+                    j++;
+                    j++;
+                    k=0;
+                    if(definitionOfWord[j]==49){
+                        break;
+                    }
+                }
+            }
         }
-
-        matrix[i][k]= definitionOfWord[j];
+        if(definitionOfWord[j]>=49 && definitionOfWord[j]<58){
+            i++;
+            k=0;
+            for(int r=0; r<4; r++){
+                matrix[i][k]=space[r];
+                k++;
+            }
+                matrix[i][k]=definitionOfWord[j];
+        }
+        if(definitionOfWord[j]==' '&& definitionOfWord[j+1]=='#'){
+            k=0;
+            matrix[i][k]='-';
+            k++;
+            matrix[i][k]=definitionOfWord[j];
+        }
+        matrix[i][k]=definitionOfWord[j];
         k++;
-
         if(definitionOfWord[j]=='\n'){
             matrix[i][k]='\0';
             i++;
@@ -202,28 +238,3 @@ void lineBreak(char *wordOfFile, char firstWordOfTheRow[], char definitionOfWord
         }
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
