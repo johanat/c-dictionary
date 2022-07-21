@@ -9,7 +9,7 @@ void printMatchingWords(char **wordOfFile,char pattern[], int length);
 void toLowerCase(char wordOfFile[]);
 void lineBreak(char *wordOfFile, char firstWordOfTheRow[], char definitionOfWord[], char** matrix);
 
-// proyecto_dicionary.
+//Proyecto_dicionary.
 
 int main()
 {
@@ -165,6 +165,9 @@ void lineBreak(char *wordOfFile, char firstWordOfTheRow[], char definitionOfWord
     int index=0;
     int j=0;
     int counter =0;
+    char *p;
+    char space[5]="    ";
+    int g=0;
 
     for(i=0; wordOfFile[i]!=' '; i++){
         firstWordOfTheRow[i]=wordOfFile[i];
@@ -179,21 +182,68 @@ void lineBreak(char *wordOfFile, char firstWordOfTheRow[], char definitionOfWord
     }
 
     length=strlen(definitionOfWord);
-
     int k=0;
     i=0;
 
     for(j=0;  j<length; j++){
-
-        if(definitionOfWord[j]>=49 && definitionOfWord[j]<58){
+        if(definitionOfWord[j]=='#'){
+            k=0;
+            matrix[i][k]='\0';
+            i++;
+            matrix[i][k]='-';
+            k++;
+            j++;
+            matrix[i][k]='\0';
+            if(definitionOfWord[j-1]=='#'&& matrix[i][g]=='-'){
+                matrix[i][k]=definitionOfWord[j];
+                k++;
+                j++;
+            }
+            for(int z=0; definitionOfWord[j]!='.'&& definitionOfWord[j+1]==' '; z++){
+                matrix[i][k]=definitionOfWord[j];
+                k++;
+                j++;
+                if(definitionOfWord[j]=='.'&&definitionOfWord[j+1]==' '){
+                    matrix[i][k]=definitionOfWord[j];
+                    k++;
+                    matrix[i][k]='\0';
+                    j++;
+                    j++;
+                    k=0;
+                    if(definitionOfWord[j]==49){
+                        break;
+                    }
+                }
+            }
+        }
+        if(definitionOfWord[j]=='.'){
+            matrix[i][k]=definitionOfWord[j];
+            k++;
             matrix[i][k]='\0';
             i++;
             k=0;
+            for(int m=0; m<4; m++){
+                matrix[i][k]=space[m];
+                k++;
+            }
+            j++;
         }
-
-        matrix[i][k]= definitionOfWord[j];
+        if(definitionOfWord[j]>=49 && definitionOfWord[j]<58){
+            k=0;
+            for(int r=0; r<4; r++){
+                matrix[i][k]=space[r];
+                k++;
+            }
+            matrix[i][k]=definitionOfWord[j];
+        }
+        if(definitionOfWord[j]==' '&& definitionOfWord[j+1]=='#'){
+            k=0;
+            matrix[i][k]='-';
+            k++;
+            matrix[i][k]=definitionOfWord[j];
+        }
+        matrix[i][k]=definitionOfWord[j];
         k++;
-
         if(definitionOfWord[j]=='\n'){
             matrix[i][k]='\0';
             i++;
@@ -202,28 +252,3 @@ void lineBreak(char *wordOfFile, char firstWordOfTheRow[], char definitionOfWord
         }
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
