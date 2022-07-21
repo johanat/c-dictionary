@@ -9,7 +9,7 @@ void printMatchingWords(char **wordOfFile,char pattern[], int length);
 void toLowerCase(char wordOfFile[]);
 void lineBreak(char *wordOfFile, char firstWordOfTheRow[], char definitionOfWord[], char** matrix);
 
-// proyecto_dicionary.
+//Proyecto_dicionary.
 
 int main()
 {
